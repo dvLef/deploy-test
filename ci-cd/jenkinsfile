@@ -17,6 +17,7 @@ pipeline {
         sh 'php -v'
         sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
         sh 'composer --version'
+        sh 'apt-get install docker-ce docker-ce-cli containerd.io -y'
       }
     }
 
