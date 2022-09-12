@@ -13,11 +13,15 @@ pipeline {
       steps {
         git branch: 'main', url: 'https://github.com/dvLef/deploy-test'
         sh 'apt-get update'
-        sh 'apt-get install php php-curl php-xml zip unzip php-zip -y'
+        sh 'apt-get install php curl php-curl php-xml zip unzip php-zip ca-certificates gnupg lsb-release  -y'
         sh 'php -v'
         sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
         sh 'composer --version'
+        sh 'mkdir -p /etc/apt/keyrings'
+        sh 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg'
+        sh 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null'
         sh 'apt-get install docker-ce docker-ce-cli containerd.io -y'
+        sh 'service docker start'
       }
     }
 
