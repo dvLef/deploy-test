@@ -9,7 +9,7 @@ pipeline {
   }
 
   stages {
-    stage('install dependicies') {
+    stage('install') {
       steps {
         git branch: 'main', url: 'https://github.com/dvLef/deploy-test'
         sh 'apt-get update'
@@ -19,7 +19,7 @@ pipeline {
         sh 'composer --verion'
       }
 
-      stage('install proyect') {
+      stage('install') {
         steps {
           sh 'cp .env.example .env'
           sh 'composer update'
@@ -28,7 +28,7 @@ pipeline {
         }
       }
 
-      stage('testing') {
+      stage('test') {
         steps {
           sh 'composer tests'
         }
