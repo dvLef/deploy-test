@@ -1,10 +1,6 @@
 pipeline {
   agent any
 
-  tools {
-    Docker "docker"
-  }
-
   parameters {
     string(name: 'container_name', defaultValue: 'deploy-test-container', description: 'Container name')
     string(name: 'image_name', defaultValue: 'deploy-test', description: 'Image name')
@@ -41,7 +37,9 @@ pipeline {
 
     stage('build') {
       steps {
-        sh 'docker build -t $image_name:$image_tag .'
+        script {
+          def dockerImage = docker.build("${params.image_name}:${params.image_tag}")
+        }
       }
     }
 
