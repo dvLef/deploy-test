@@ -1,0 +1,38 @@
+pipeline {
+  agent any
+
+  parameters {
+    string(name: 'container_name', defaultValue: 'deploy-test-container', description: 'Container name')
+    string(name: 'image_name', defaultValue: 'deploy-test', description: 'Image name')
+    string(name: 'image_tag', defaultValue: 'latest', description: 'Image tag')
+    string(name: 'container_port', defaultValue: '80', description: 'Container port')
+  }
+
+  stages {
+    stage('install dependicies') {
+      steps {
+        git branch: 'main', url: 'https://github.com/dvLef/deploy-test'
+        sh 'apt-get update'
+        sh 'apt-get install php php-curl php-xml zip unzip php-zip -y'
+        sh 'php -v'
+        sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
+        sh 'composer --verion'
+      }
+
+      stage('install proyect') {
+        steps {
+          sh 'cp .env.example .env'
+          sh 'composer update'
+          sh 'composer install'
+          sh 'php artisan key:generate'
+        }
+      }
+
+      stage('testing') {
+        steps {
+          sh 'composer tests'
+        }
+      }
+    }
+  }
+}
