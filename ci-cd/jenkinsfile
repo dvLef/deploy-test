@@ -1,6 +1,8 @@
 pipeline {
-  agent {
-    docker { image 'node:16.13.1-alpine' }
+  agent any
+
+  tools {
+    Docker "docker"
   }
 
   parameters {
@@ -15,7 +17,7 @@ pipeline {
       steps {
         git branch: 'main', url: 'https://github.com/dvLef/deploy-test'
         sh 'apt-get update'
-        sh 'apt-get install php php-curl php-xml zip unzip php-zip -y'
+        sh 'apt-get install php curl php-curl php-xml zip unzip php-zip -y'
         sh 'php -v'
         sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
         sh 'composer --version'
