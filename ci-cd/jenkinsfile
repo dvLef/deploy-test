@@ -51,10 +51,11 @@ pipeline {
     }
 
     stage('build') {
-      container('docker-container') {
-        steps {
+      steps {
+        container('docker-container'){
           sh 'docker build -t ${image_name}:${image_tag} .'
         }
+      }
       }
     }
 
