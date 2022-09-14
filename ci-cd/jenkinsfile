@@ -28,7 +28,6 @@ pipeline {
         sh 'docker --version'
 
         // start docker service
-        sh 'groupadd docker'
         sh 'usermod -aG docker $(whoami)'
         sh 'service docker start'
 
