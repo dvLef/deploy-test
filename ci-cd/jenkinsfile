@@ -31,6 +31,7 @@ pipeline {
         sh 'usermod -aG docker $(whoami)'
         sh 'service docker start'
         sh 'ls -la /var/run/docker.sock'
+        sh 'service docker status'
 
         // verify docker daemon is running
         sh 'docker ps'
