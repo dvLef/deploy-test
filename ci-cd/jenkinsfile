@@ -28,10 +28,10 @@ pipeline {
         sh 'docker --version'
 
         // start docker service
-        sh 'dockerd'
+        sh 'groupadd docker'
+        sh 'usermod -aG docker ($whoami)'
+        sh 'newgrp docker'
         sh 'service docker start'
-        sh 'ls -la /var/run/docker.sock'
-        sh 'service docker status'
 
 
         // verify docker daemon is running
