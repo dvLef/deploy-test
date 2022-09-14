@@ -11,42 +11,47 @@ pipeline {
   stages {
     stage('evironment') {
       steps {
-        git branch: 'main', url: 'https://github.com/dvLef/deploy-test'
-        sh 'apt-get update'
-        sh 'apt-get install php curl php-curl php-xml zip unzip php-zip -y'
-        sh 'php -v'
-        sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
-        sh 'composer --version'
+        container('jnlp'){
+          git branch: 'main', url: 'https://github.com/dvLef/deploy-test'
+          sh 'apt-get update'
+          sh 'apt-get install php curl php-curl php-xml zip unzip php-zip -y'
+          sh 'php -v'
+          sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
+          sh 'composer --version'
 
-        // install docker in jnlp container
-        sh 'apt-get update'
-        sh 'apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y'
-        sh 'curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -'
-        sh 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"'
-        sh 'apt-get update'
-        sh 'apt-get install docker-ce docker-ce-cli containerd.io -y'
-        sh 'docker --version'
+          // install docker in jnlp container
+          sh 'apt-get update'
+          sh 'apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y'
+          sh 'curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -'
+          sh 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"'
+          sh 'apt-get update'
+          sh 'apt-get install docker-ce docker-ce-cli containerd.io -y'
+          sh 'docker --version'
 
-        // start docker service
-        sh 'usermod -aG docker $(whoami)'
-        sh 'newgrp docker'
-        sh 'service docker start'
-
+          // start docker service
+          sh 'usermod -aG docker $(whoami)'
+          sh 'newgrp docker'
+          sh 'service docker start'
+        }
       }
     }
 
     stage('install') {
       steps {
-        sh 'cp .env.example .env'
-        sh 'composer update'
-        sh 'composer install --no-interaction'
-        sh 'php artisan key:generate'
+        container('jnlp'){
+          sh 'cp .env.example .env'
+          sh 'composer update'
+          sh 'composer install --no-interaction'
+          sh 'php artisan key:generate'
+        }
       }
     }
 
     stage('tests') {
       steps {
-        sh 'composer tests'
+        container('jnlp'){
+          sh 'composer tests'
+        }
       }
     }
 
