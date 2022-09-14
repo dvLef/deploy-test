@@ -36,10 +36,14 @@ pipeline {
     }
 
     stage('build') {
-      steps {
-        script {
-          sh 'def dockerImage = docker.build("${params.image_name}:${params.image_tag}")'
+      agent {
+        docker {
+          image 'docker:latest'
+        //  args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
+      }
+      steps {
+        sh 'docker build -t $image_name:$image_tag .'
       }
     }
 
