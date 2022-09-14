@@ -28,11 +28,11 @@ pipeline {
         sh 'docker --version'
 
         // start docker service
-        sh 'usermod -aG docker $(whoami)'
+        sh 'dockerd'
         sh 'service docker start'
         sh 'ls -la /var/run/docker.sock'
         sh 'service docker status'
-        sh 'dockerd'
+
 
         // verify docker daemon is running
         sh 'docker ps'
