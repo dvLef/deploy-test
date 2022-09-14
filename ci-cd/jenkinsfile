@@ -19,6 +19,7 @@ pipeline {
         sh 'composer --version'
 
         // instalacion de docker para amazon linux 2
+        sh 'apt-get install amazon-linux-extras -y'
         sh 'amazon-linux-extras install docker -y'
         sh 'service docker start'
         sh 'usermod -a -G docker ec2-user'
