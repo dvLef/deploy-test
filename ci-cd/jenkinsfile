@@ -28,8 +28,8 @@ pipeline {
         sh 'docker --version'
 
         // run docker deamon
-        sh 'service docker status'
         sh 'service docker start'
+        sh 'service docker status'
 
       }
     }
