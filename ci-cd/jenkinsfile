@@ -17,6 +17,7 @@ pipeline {
       steps {
         container('jnlp'){
           git branch: 'main', url: 'https://github.com/dvLef/deploy-test'
+          sh 'whoami'
           sh 'apt-get update'
           sh 'apt-get install php curl php-curl php-xml zip unzip php-zip -y'
           sh 'php -v'
