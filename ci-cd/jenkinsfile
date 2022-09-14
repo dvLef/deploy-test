@@ -17,6 +17,14 @@ pipeline {
         sh 'php -v'
         sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
         sh 'composer --version'
+
+        // instalacion de docker
+        sh 'apt-get install apt-transport-https ca-certificates gnupg-agent software-properties-common -y'
+        sh 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -'
+        sh 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"'
+        sh 'apt-get update'
+        sh 'apt-get install docker-ce docker-ce-cli containerd.io -y'
+        sh 'docker --version'
       }
     }
 
@@ -32,18 +40,6 @@ pipeline {
     stage('tests') {
       steps {
         sh 'composer tests'
-      }
-    }
-
-    stage('build') {
-      agent {
-        docker {
-          image 'docker:latest'
-        //  args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-      }
-      steps {
-        sh 'docker build -t $image_name:$image_tag .'
       }
     }
 
