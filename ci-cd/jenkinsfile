@@ -32,9 +32,6 @@ pipeline {
         sh 'newgrp docker'
         sh 'service docker start'
 
-
-        // verify docker daemon is running
-        sh 'docker ps'
       }
     }
 
@@ -54,8 +51,10 @@ pipeline {
     }
 
     stage('build') {
-      steps {
-        sh 'docker build -t ${image_name}:${image_tag} .'
+      container('docker-container') {
+        steps {
+          sh 'docker build -t ${image_name}:${image_tag} .'
+        }
       }
     }
 
