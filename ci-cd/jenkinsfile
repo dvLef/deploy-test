@@ -56,10 +56,9 @@ pipeline {
           sh 'docker build -t ${image_name}:${image_tag} .'
         }
       }
-      }
     }
-
   }
 }
+
 
 
