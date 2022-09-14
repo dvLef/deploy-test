@@ -28,7 +28,7 @@ pipeline {
         sh 'docker --version'
 
         // start docker service
-        sh 'usermod -aG docker ($whoami)'
+        sh 'usermod -aG docker $(whoami)'
         sh 'newgrp docker'
         sh 'service docker start'
 
