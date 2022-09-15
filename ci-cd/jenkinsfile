@@ -90,8 +90,10 @@ pipeline {
         container('docker-container'){
           // install docker in alpine linux
           sh 'apk add --update docker openrc'
-          sh 'service docker start'
-          sh 'docker --version'
+
+          // build image
+          sh 'docker build -t ${image_name}:${image_tag} .'
+
         }
       }
     }
