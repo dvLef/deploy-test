@@ -10,7 +10,7 @@ pipeline {
         spec:
           containers:
           - name: composer-container
-            image: finizens/php:7.1.3-composer
+            image: shippingdocker/php-composer:7.4
             command:
             - cat
             tty: true
@@ -64,7 +64,6 @@ pipeline {
       steps {
         container('composer-container'){
           sh 'cp .env.example .env'
-          sh 'composer update'
           sh 'composer install --no-interaction'
           sh 'php artisan key:generate'
         }
