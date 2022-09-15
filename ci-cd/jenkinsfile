@@ -17,7 +17,7 @@ pipeline {
           - name: docker-container
             image: docker:latest
             command:
-            - cat
+            - -v /var/run/docker.sock:/var/run/docker.sock
             tty: true
         '''
     }
