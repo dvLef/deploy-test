@@ -81,7 +81,9 @@ pipeline {
     stage('build') {
       steps {
         container('docker-container'){
-          sh 'docker build -v /var/run/docker.sock:/var/run/docker.sock -t ${image_name}:${image_tag} .'
+          sh 'usermod -aG docker $(whoami)'
+          sh 'newgrp docker'
+          sh 'docker build -t ${image_name}:${image_tag} .'
         }
       }
     }
