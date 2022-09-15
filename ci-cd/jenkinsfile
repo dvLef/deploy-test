@@ -19,6 +19,9 @@ pipeline {
             command:
             - cat
             tty: true
+            volumeMounts:
+             - mountPath: /var/run/docker.sock
+               name: docker-sock
         '''
     }
   }
@@ -81,8 +84,6 @@ pipeline {
     stage('build') {
       steps {
         container('docker-container'){
-          sh 'usermod -aG docker $(whoami)'
-          sh 'newgrp docker'
           sh 'docker build -t ${image_name}:${image_tag} .'
         }
       }
