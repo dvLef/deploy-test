@@ -88,6 +88,8 @@ pipeline {
     stage('build') {
       steps {
         container('docker-container'){
+          // create docker directory for daemon in /etc
+          sh 'mkdir -p /etc/docker'
           // create daemon.json
           sh 'echo \'{ "dns": ["10.100.0.10"] }\' > /etc/docker/daemon.json'
           sh 'service docker restart'
