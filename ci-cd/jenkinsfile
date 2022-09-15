@@ -6,7 +6,7 @@ pipeline {
         kind: Pod
         metadata:
           labels:
-            some-label: slave-pod
+            some-label: slave-kubepod
         spec:
           containers:
           - name: composer-container
