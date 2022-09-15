@@ -1,25 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          labels:
-            some-label: slave-pod
-        spec:
-          containers:
-          - name: composer-container
-            image: composer:latest
-            command:
-            - cat
-            tty: true
-          - name: docker-container
-            image: docker:latest
-            command:
-            - cat
-            tty: true
-        '''
+      cloud 'kubernetes'
     }
   }
 
