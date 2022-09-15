@@ -17,7 +17,7 @@ pipeline {
           - name: docker-container
             image: docker:latest
             command:
-            - -v /var/run/docker.sock:/var/run/docker.sock
+            - cat
             tty: true
         '''
     }
@@ -81,7 +81,7 @@ pipeline {
     stage('build') {
       steps {
         container('docker-container'){
-          sh 'docker build -t ${image_name}:${image_tag} .'
+          sh 'docker build -v /var/run/docker.sock:/var/run/docker.sock -t ${image_name}:${image_tag} .'
         }
       }
     }
