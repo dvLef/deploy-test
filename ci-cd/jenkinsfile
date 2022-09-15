@@ -98,10 +98,10 @@ pipeline {
           sh 'echo \'{ "dns": ["10.100.0.10] }"\' > /etc/docker/daemon.json'
 
           // restart docker service
-          sh 'service docker restart'
+          // sh 'service docker restart'
 
           // build image
-          sh 'docker build -t ${image_name}:${image_tag} .'
+          // sh 'docker build -t ${image_name}:${image_tag} .'
 
         }
       }
