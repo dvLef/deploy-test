@@ -15,7 +15,7 @@ pipeline {
             - cat
             tty: true
           - name: docker-container
-            image: docker:latest
+            image: docker:20.10.18-cli
             command:
             - cat
             tty: true
