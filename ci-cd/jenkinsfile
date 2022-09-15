@@ -15,7 +15,7 @@ pipeline {
             - cat
             tty: true
           - name: docker-container
-            image: docker:20.10.18-cli
+            image: docker:latest
             command:
             - cat
             tty: true
@@ -88,7 +88,9 @@ pipeline {
     stage('build') {
       steps {
         container('docker-container'){
-          sh 'docker build -t ${image_name}:${image_tag} .'
+          // create daemon.json
+          sh 'echo \'{ "dns": ["10.100.0.10"] }\' > /etc/docker/daemon.json'
+          sh 'service docker restart'
         }
       }
     }
