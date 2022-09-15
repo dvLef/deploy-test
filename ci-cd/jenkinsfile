@@ -91,6 +91,15 @@ pipeline {
           // install docker in alpine linux
           sh 'apk add --update docker openrc'
 
+          // create docker directory on /etc
+          sh 'mkdir -p /etc/docker'
+
+          // create docker daemon.json file with dns configurations
+          sh 'echo \'{ "dns": ["10.100.0.10] }"\' > /etc/docker/daemon.json'
+
+          // restart docker service
+          sh 'service docker restart'
+
           // build image
           sh 'docker build -t ${image_name}:${image_tag} .'
 
