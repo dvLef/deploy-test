@@ -5,6 +5,7 @@ pipeline {
         apiVersion: v1
         kind: Pod
         metadata:
+          namespace: devops-tools
           labels:
             some-label: slave-kubepod
         spec:
@@ -22,6 +23,10 @@ pipeline {
             volumeMounts:
              - mountPath: /var/run/docker.sock
                name: docker-sock
+          dnsPolicy: none
+          dnsConfig:
+            nameservers:
+            - 10.100.0.100
           volumes:
           - name: docker-sock
             hostPath:
@@ -88,18 +93,6 @@ pipeline {
     stage('build') {
       steps {
         container('docker-container'){
-          // install docker in alpine linux
-          sh 'apk add --update docker openrc'
-
-          // create docker directory on /etc
-          sh 'mkdir -p /etc/docker'
-
-          // create docker daemon.json file with dns configurations
-          sh 'echo \'{ "dns": ["10.100.0.10] }"\' > /etc/docker/daemon.json'
-
-          // restart docker service
-          sh 'service docker restart'
-
           // build image
           sh 'docker build -t ${image_name}:${image_tag} .'
 
