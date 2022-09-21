@@ -1,55 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          namespace: devops-tools
-          labels:
-            some-label: slave-kubepod
-        spec:
-          containers:
-            - name: composer-container
-              image: shippingdocker/php-composer:7.4
-              command:
-              - cat
-              tty: true
-            - name: docker
-              image: docker:latest
-              command:
-                - /bin/cat
-              tty: true
-              volumeMounts:
-                - name: dind-certs
-                  mountPath: /certs
-              env:
-                - name: DOCKER_TLS_CERTDIR
-                  value: /certs
-                - name: DOCKER_CERT_PATH
-                  value: /certs
-                - name: DOCKER_TLS_VERIFY
-                  value: 1
-                - name: DOCKER_HOST
-                  value: tcp://localhost:2376
-            - name: dind
-              image: docker:dind
-              securityContext:
-                privileged: true
-              env:
-                - name: DOCKER_TLS_CERTDIR
-                  value: /certs
-              volumeMounts:
-                - name: dind-storage
-                  mountPath: /var/lib/docker
-                - name: dind-certs
-                  mountPath: /certs/client
-          volumes:
-          - name: dind-storage
-            emptyDir: {}
-          - name: dind-certs
-            emptyDir: {}
-        '''
+      yaml 'slave-pod.yaml'
     }
   }
 
@@ -61,35 +13,6 @@ pipeline {
   }
 
   stages {
-
-    // stage('evironment') {
-    //   steps {
-    //     container('jnlp'){
-    //       git branch: 'main', url: 'https://github.com/dvLef/deploy-test'
-    //       sh 'whoami'
-    //       sh 'apt-get update'
-    //       sh 'apt-get install php curl php-curl php-xml zip unzip php-zip -y'
-    //       sh 'php -v'
-    //       sh 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
-    //       sh 'composer --version'
-
-    //       // install docker in jnlp container
-    //       sh 'apt-get update'
-    //       sh 'apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y'
-    //       sh 'curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -'
-    //       sh 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"'
-    //       sh 'apt-get update'
-    //       sh 'apt-get install docker-ce docker-ce-cli containerd.io -y'
-    //       sh 'docker --version'
-
-    //       // start docker service
-    //       sh 'usermod -aG docker $(whoami)'
-    //       sh 'newgrp docker'
-    //       sh 'service docker start'
-    //     }
-    //   }
-    // }
-
     stage('install') {
       steps {
         container('composer-container'){
