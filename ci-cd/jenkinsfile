@@ -24,7 +24,7 @@ pipeline {
                   memory: 256Mi
               env:
                 - name: DOCKER_HOST
-                  value: tcp://localhost:2375
+                  value: tcp://${HOSTNAME}:2375
             - name: dind-daemon
               image: docker:1.12.6-dind
               resources:
