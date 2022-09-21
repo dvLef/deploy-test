@@ -10,25 +10,35 @@ pipeline {
             some-label: slave-kubepod
         spec:
           containers:
-          - name: composer-container
-            image: shippingdocker/php-composer:7.4
-            command:
-            - cat
-            tty: true
-          - name: docker-cmds
-            image: docker:1.12.6
-            command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
-            resources:
-              requests:
-                cpu: 10m
-                memory: 256Mi
-            volumeMounts:
-              - mountPath: /var/run
-                name: docker-sock
+            - name: composer-container
+              image: shippingdocker/php-composer:7.4
+              command:
+              - cat
+              tty: true
+            - name: docker-cmds
+              image: docker:1.12.6
+              command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 256Mi
+              env:
+                - name: DOCKER_HOST
+                  value: tcp://localhost:2375
+            - name: dind-daemon
+              image: docker:1.12.6-dind
+              resources:
+                requests:
+                  cpu: 20m
+                  memory: 512Mi
+              securityContext:
+                privileged: true
+              volumeMounts:
+                - name: docker-graph-storage
+                  mountPath: /var/lib/docker
           volumes:
-            - name: docker-sock
-              hostPath:
-                  path: /var/run
+            - name: docker-graph-storage
+              emptyDir: {}
         '''
     }
   }
