@@ -90,7 +90,7 @@ pipeline {
 
     stage('build') {
       steps {
-        container('docker-container'){
+        container('docker-cmds'){
           // build image
           sh 'docker build -t ${image_name}:${image_tag} .'
         }
