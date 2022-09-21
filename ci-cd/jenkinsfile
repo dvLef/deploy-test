@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      yaml 'slave-pod.yaml'
+      yamlFile 'slave-pod.yaml'
     }
   }
 
