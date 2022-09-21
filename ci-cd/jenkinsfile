@@ -15,22 +15,20 @@ pipeline {
             command:
             - cat
             tty: true
-          - name: docker-container
-            image: alpine:latest
-            command:
-            - cat
-            tty: true
+          - name: docker-cmds
+            image: docker:1.12.6
+            command: ['docker', 'run', '-p', '80:80', 'httpd:latest']
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
             volumeMounts:
-             - mountPath: /var/run/docker.sock
-               name: docker-sock
-          dnsPolicy: none
-          dnsConfig:
-            nameservers:
-            - 10.100.0.100
+              - mountPath: /var/run
+                name: docker-sock
           volumes:
-          - name: docker-sock
-            hostPath:
-              path: /var/run/docker.sock
+            - name: docker-sock
+              hostPath:
+                  path: /var/run
         '''
     }
   }
@@ -95,7 +93,6 @@ pipeline {
         container('docker-container'){
           // build image
           sh 'docker build -t ${image_name}:${image_tag} .'
-
         }
       }
     }
