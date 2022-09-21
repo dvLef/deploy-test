@@ -36,9 +36,19 @@ pipeline {
         container('docker'){
           // build image
           sh 'docker build -t ${image_name}:${image_tag} .'
-          // push image to ecr
-          sh 'docker tag ${image_name}:${image_tag} 705505288478.dkr.ecr.sa-east-1.amazonaws.com/ci-deploy-test-registry/${image_name}:${image_tag}'
-          sh 'docker push 705505288478.dkr.ecr.sa-east-1.amazonaws.com/ci-deploy-test-registry/${image_name}:${image_tag}'
+
+          // install aws cli and prerequisites
+          sh 'apt-get update && apt-get install -y unzip gblibc groff less'
+          sh 'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
+          sh 'unzip awscliv2.zip'
+          sh 'sudo ./aws/install'
+          sh 'aws --version'
+
+          // // login to aws ecr
+          // sh 'aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.sa-east-1.amazonaws.com'
+          // // push image to ecr
+          // sh 'docker tag ${image_name}:${image_tag} 705505288478.dkr.ecr.sa-east-1.amazonaws.com/ci-deploy-test-registry/${image_name}:${image_tag}'
+          // sh 'docker push 705505288478.dkr.ecr.sa-east-1.amazonaws.com/ci-deploy-test-registry/${image_name}:${image_tag}'
         }
       }
     }
