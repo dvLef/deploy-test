@@ -5,6 +5,11 @@ pipeline {
     }
   }
 
+  environment {
+      AWS_CREDENTIALS = credentials("aws-credentials")
+      AWS_DEFAULT_REGION = "sa-east-1"
+  }
+
   parameters {
     string(name: 'container_name', defaultValue: 'deploy-test-container', description: 'Container name')
     string(name: 'image_name', defaultValue: 'deploy-test', description: 'Image name')
@@ -34,26 +39,25 @@ pipeline {
     stage('build') {
       steps {
         container('docker'){
-          // build image
-          sh 'docker build -t ${image_name}:${image_tag} .'
 
-          // install aws cli and prerequisites
-          sh 'apt-get update && apt-get install -y unzip gblibc groff less'
-          sh 'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
-          sh 'unzip awscliv2.zip'
-          sh './aws/install'
+          // install aws cli
+          sh 'apk add --no-cache aws-cli'
           sh 'aws --version'
+          sh 'aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin 705505288478.dkr.ecr.sa-east-1.amazonaws.com'
 
-          // // login to aws ecr
-          // sh 'aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.sa-east-1.amazonaws.com'
-          // // push image to ecr
-          // sh 'docker tag ${image_name}:${image_tag} 705505288478.dkr.ecr.sa-east-1.amazonaws.com/ci-deploy-test-registry/${image_name}:${image_tag}'
-          // sh 'docker push 705505288478.dkr.ecr.sa-east-1.amazonaws.com/ci-deploy-test-registry/${image_name}:${image_tag}'
+          // build image
+          sh 'docker build -t ${image_name} .'
+
+          // push image to ecr
+          sh 'docker tag ${image_name}:${image_tag} 705505288478.dkr.ecr.sa-east-1.amazonaws.com/${image_name}:${image_tag}'
+          sh 'docker push 705505288478.dkr.ecr.sa-east-1.amazonaws.com/${image_name}:${image_tag}'
         }
       }
     }
   }
 }
+
+
 
 
 
