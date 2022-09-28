@@ -56,4 +56,3 @@ RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 RUN composer install --optimize-autoloader --no-dev
 
 EXPOSE 80
-ENTRYPOINT ["/var/www/docker/run.sh"]
