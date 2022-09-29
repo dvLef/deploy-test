@@ -55,4 +55,7 @@ RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 # Deployment steps
 RUN composer install --optimize-autoloader --no-dev
 
+# Run artisan serve
+CMD php artisan serve --host=0.0.0.0
+
 EXPOSE 80
