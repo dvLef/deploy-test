@@ -70,6 +70,10 @@ pipeline {
 
           // update kubeconfig with aws eks
           sh 'aws eks update-kubeconfig --region sa-east-1 --name pstemuco_test'
+
+          // deploy into pod
+          sh 'kubectl delete -f ci-cd/deploy-test-deployment.yaml'
+          sh 'kubectl apply -f ci-cd/deploy-test-deployment.yaml'
         }
       }
     }

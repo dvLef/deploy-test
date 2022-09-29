@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-test-app
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: develop
+  template:
+    metadata:
+      labels:
+        role: develop
+    spec:
+      containers:
+      - name: deploy-test-app
+        image: 705505288478.dkr.ecr.sa-east-1.amazonaws.com/deploy-test:latest
+        ports:
+        - containerPort: 8000
