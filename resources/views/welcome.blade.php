@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Deploy test
+                    Deploy test nueva version
                 </div>
 
                 <div class="links">
