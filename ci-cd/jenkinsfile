@@ -48,6 +48,9 @@ pipeline {
           // build image
           sh 'docker build -t ${image_name} .'
 
+          // delete old images in ecr
+          sh 'aws ecr batch-delete-image --repository-name deploy-test --image-ids imageTag=latest'
+
           // push image to ecr
           sh 'docker tag ${image_name}:${image_tag} 705505288478.dkr.ecr.sa-east-1.amazonaws.com/${image_name}:${image_tag}'
           sh 'docker push 705505288478.dkr.ecr.sa-east-1.amazonaws.com/${image_name}:${image_tag}'
