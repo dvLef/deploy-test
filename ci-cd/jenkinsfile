@@ -68,7 +68,8 @@ pipeline {
           sh 'mv ./kubectl /usr/local/bin/kubectl'
           sh 'kubectl version --client'
 
-
+          // update kubeconfig with aws eks
+          sh 'aws eks update-kubeconfig --region sa-east-1 --name pstemuco_test'
         }
       }
     }
