@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Aplicación laravel de prueba
+                    Aplicación v1.5
                 </div>
 
                 <div class="links">
