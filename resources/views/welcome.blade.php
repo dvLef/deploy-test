@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Deploy test nueva version
+                    Aplicación laravel de prueba
                 </div>
 
                 <div class="links">
